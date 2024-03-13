@@ -23,7 +23,9 @@ export type Post = {
 	assessment?: string;
 	question?: string;
 	comments: Record<string, Comment>;
+	selected: true | false | null;
 	ref?: any;
+	onUpdateHug: any;
 };
 
 export interface CardProps {

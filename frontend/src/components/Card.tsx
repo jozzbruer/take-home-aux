@@ -1,15 +1,21 @@
-import { BookmarkAdd, FavoriteOutlined, ReplyOutlined } from '@mui/icons-material';
+import { BookmarkAdd, Favorite, FavoriteOutlined, ReplyOutlined } from '@mui/icons-material';
 import { Box, Card, CardContent, Collapse, IconButton, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Post } from '../utils/type';
 import useDaysAgo from '../hooks/useDaysAgo';
 
 const PostCard: React.FC<Post> = React.forwardRef(
-	({ title, patient_description, created_at, num_hugs, comments }, ref: any) => {
+	(
+		{ title, patient_description, created_at, num_hugs, comments, onUpdateHug, selected },
+		ref: any
+	) => {
 		const [expanded, setExpanded] = useState(false);
 
 		const handleReplyClick = () => {
 			setExpanded(!expanded);
+		};
+		const handleHugUpdate = () => {
+			if (!selected) onUpdateHug();
 		};
 
 		const cardContent = (
@@ -31,16 +37,24 @@ const PostCard: React.FC<Post> = React.forwardRef(
 					alignItems='center'
 					justifyContent='space-between'>
 					<CardContent>
-						<IconButton aria-label='add to hugs'>
-							{num_hugs} <FavoriteOutlined />
+						<IconButton
+							style={{ color: selected ? '#FF83B6' : '', fontSize: '15px' }}
+							aria-label='add to hugs'
+							onClick={handleHugUpdate}>
+							<Favorite /> {num_hugs} hugs
 						</IconButton>
 						<IconButton
 							aria-label='reply'
+							style={{ fontSize: '15px' }}
 							onClick={handleReplyClick}>
-							<ReplyOutlined /> {Object.keys(comments!).length}comments
+							<ReplyOutlined /> {Object.keys(comments!).length} comments
 						</IconButton>
 
-						<IconButton aria-label='save'>{<BookmarkAdd />}</IconButton>
+						<IconButton
+							aria-label='save'
+							style={{ fontSize: '15px' }}>
+							{<BookmarkAdd />}
+						</IconButton>
 					</CardContent>
 					<p>{useDaysAgo(created_at)} days ago</p>
 				</Box>

@@ -5,7 +5,7 @@ import PostCard from './Card';
 
 const PostsList: React.FC = () => {
 	const [pageNum, setPageNum] = useState(1);
-	const { isLoading, isError, error, results, hasNextPage } = useFetchPosts(pageNum);
+	const { isLoading, isError, error, results, hasNextPage, refetchPosts } = useFetchPosts(pageNum);
 
 	const intersectionObserver = useRef<IntersectionObserver>();
 	const lastElementRef = useCallback(
@@ -26,6 +26,27 @@ const PostsList: React.FC = () => {
 
 	if (isError) return <p>Error : {error.message}</p>;
 
+	// make custom hooks for this
+	const handleHugUpdate = async (postUrl: any) => {
+		try {
+			const response = await fetch(`http://localhost:8000/posts/${postUrl}/update_hugs`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update data');
+			}
+			await response.json();
+			refetchPosts();
+			return;
+		} catch (error) {
+			console.error('Error updating data:', error);
+			throw error;
+		}
+	};
 	const posts = results.map((post, i) => {
 		if (results.length === i + 1) {
 			return (
@@ -37,6 +58,8 @@ const PostsList: React.FC = () => {
 					created_at={post.created_at}
 					num_hugs={post.num_hugs}
 					comments={post.comments}
+					selected={post.selected}
+					onUpdateHug={() => handleHugUpdate(post.post_url)}
 				/>
 			);
 		}
@@ -48,6 +71,8 @@ const PostsList: React.FC = () => {
 				created_at={post.created_at}
 				num_hugs={post.num_hugs}
 				comments={post.comments}
+				selected={post.selected}
+				onUpdateHug={() => handleHugUpdate(post.post_url)}
 			/>
 		);
 	});
