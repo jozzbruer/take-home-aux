@@ -1,20 +1,21 @@
 import { BookmarkAdd, FavoriteOutlined, ReplyOutlined } from '@mui/icons-material';
 import { Box, Card, CardContent, Collapse, IconButton, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { Post } from '../utils/type';
 
-const PostCard: React.FC = () => {
+const PostCard: React.FC<Post> = React.forwardRef(({ title }, ref: any) => {
 	const [expanded, setExpanded] = useState(false);
 
 	const handleReplyClick = () => {
 		setExpanded(!expanded);
 	};
-	return (
-		<Card sx={{ marginBottom: 5, width: '70%', minHeight: '240px' }}>
+	const cardContent = (
+		<Card sx={{ marginBottom: 5, width: '70%', minHeight: '210px' }}>
 			<CardContent>
 				<Typography
 					variant='h5'
 					component='h2'>
-					Title
+					{title}
 				</Typography>
 				<Typography
 					variant='body2'
@@ -35,23 +36,26 @@ const PostCard: React.FC = () => {
 						onClick={handleReplyClick}>
 						{<ReplyOutlined />}
 					</IconButton>
-					<Collapse
-						in={expanded}
-						timeout='auto'
-						unmountOnExit>
-						<TextField
-							id='outlined-multiline-static'
-							label='Reply'
-							fullWidth
-							variant='outlined'
-						/>
-					</Collapse>
+
 					<IconButton aria-label='save'>{<BookmarkAdd />}</IconButton>
 				</CardContent>
 				<p>time ago</p>
 			</Box>
+			<Collapse
+				in={expanded}
+				timeout='auto'
+				unmountOnExit>
+				<TextField
+					id='outlined-multiline-static'
+					label='Reply'
+					fullWidth
+					variant='outlined'
+				/>
+			</Collapse>
 		</Card>
 	);
-};
+	const card = ref ? <Box ref={ref}>{cardContent}</Box> : <Box>{cardContent}</Box>;
+	return card;
+});
 
 export default PostCard;
