@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 from typing import Dict, Any, List
 
-class Posts(BaseModel):
+class Post(BaseModel):
     post_url: str
     title: str
     created_at: str
@@ -10,4 +10,5 @@ class Posts(BaseModel):
     patient_description: str
     assessment: str
     question: str
+    selected: bool = True
     comments: Dict[str, Any]

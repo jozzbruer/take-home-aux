@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 import json
 from fastapi.middleware.cors import CORSMiddleware
 
-from models import Posts
+from models import Post
 
 app = FastAPI()
 
@@ -44,7 +44,29 @@ async def get_posts(page: int = Query(1, description="Page number", gt=0),
     }
 
 
+# Update Hug count and set a selected field to track user selection
+@app.put('/posts/{post_url}/update_hugs')
+async def update_hugs(post_url: str):
+     data = read_file(DATABASE_FILE)
+
+     post = next((p for p in data if p["post_url"] == post_url), None)
+     if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+     # Increment hug count by 1
+     post["num_hugs"] += 1
+    # Set selected field to true
+     post["selected"] = True
+
+     write_to_file(DATABASE_FILE,data)  # Write updated data back to file
+
+     return {"message": f"Post with URL '{post_url}' updated successfully."}
+     
+
 def read_file (file_path):
     with open(file_path,'r') as file:
         data = json.load(file)
     return data
+
+def write_to_file (file_path, data):
+    with open(file_path,'w') as file:
+        json.dump(data, file, indent=4)
