@@ -1,5 +1,5 @@
 import { Post, PostData } from '../utils/type';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const fetchPosts = async (pageParam = 1, option = {}): Promise<PostData> => {
 	const result = await fetch(`http://localhost:8000/posts?page=${pageParam}`, option);
@@ -14,31 +14,44 @@ const useFetchPosts = (pageParam = 1) => {
 	const [error, setError] = useState<any>({});
 	const [hasNextPage, setHasNextPage] = useState(false);
 
-	useEffect(() => {
+	const fetchData = useCallback(async (page: number) => {
 		setIsLoading(true);
 		setIsError(false);
 		setError({});
 
-		const controller = new AbortController();
-		const { signal } = controller;
+		try {
+			const data = await fetchPosts(page);
+			setResults((prev) => [...prev, ...data.data]);
+			setHasNextPage(data.page < data.total_pages);
+		} catch (error) {
+			setIsError(true);
+			setError({ message: error });
+		}
 
-		fetchPosts(pageParam, { signal })
-			.then((data: PostData) => {
-				setResults((prev) => [...prev, ...data.data]);
-				setHasNextPage(data.page < data.total_pages);
-				setIsLoading(false);
-			})
-			.catch((error) => {
-				setIsLoading(false);
-				if (signal.aborted) return;
-				setIsError(true);
-				setError({ message: error });
-			});
+		setIsLoading(false);
+	}, []);
 
-		return () => controller.abort();
-	}, [pageParam]);
+	useEffect(() => {
+		fetchData(pageParam);
+	}, [fetchData, pageParam]);
 
-	return { results, isLoading, isError, error, hasNextPage };
+	const refetchPosts = useCallback(() => {
+		// Clear existing results and refetch from page 1
+		setResults([]);
+		fetchData(1);
+	}, [fetchData]);
+
+	return useMemo(
+		() => ({
+			results,
+			isLoading,
+			isError,
+			error,
+			hasNextPage,
+			refetchPosts,
+		}),
+		[results, isLoading, isError, error, hasNextPage, refetchPosts]
+	);
 };
 
 export default useFetchPosts;
