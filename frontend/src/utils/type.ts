@@ -17,12 +17,12 @@ export type PostData = {
 export type Post = {
 	post_url?: string;
 	title: string;
-	created_at?: string;
-	num_hugs?: number;
-	patient_description?: string;
+	created_at: string;
+	num_hugs: number;
+	patient_description: string;
 	assessment?: string;
 	question?: string;
-	comments?: Record<string, Comment>;
+	comments: Record<string, Comment>;
 	ref?: any;
 };
 

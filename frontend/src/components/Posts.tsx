@@ -33,6 +33,10 @@ const PostsList: React.FC = () => {
 					ref={lastElementRef}
 					key={post.post_url}
 					title={post.title}
+					patient_description={post.patient_description}
+					created_at={post.created_at}
+					num_hugs={post.num_hugs}
+					comments={post.comments}
 				/>
 			);
 		}
@@ -40,6 +44,10 @@ const PostsList: React.FC = () => {
 			<PostCard
 				key={post.post_url}
 				title={post.title}
+				patient_description={post.patient_description}
+				created_at={post.created_at}
+				num_hugs={post.num_hugs}
+				comments={post.comments}
 			/>
 		);
 	});
