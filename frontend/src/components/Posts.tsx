@@ -27,8 +27,6 @@ const PostsList: React.FC = () => {
 
 	if (isError) return <p>Error : {error.message}</p>;
 
-	// make custom hooks for this
-
 	const posts = results.map((post, i) => {
 		if (results.length === i + 1) {
 			return (
