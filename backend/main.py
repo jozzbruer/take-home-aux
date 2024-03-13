@@ -1,8 +1,23 @@
 from fastapi import FastAPI, Query
 import json
+from fastapi.middleware.cors import CORSMiddleware
+
 from models import Posts
 
 app = FastAPI()
+
+# Define allowed origins
+# Replace * with specific origins if needed
+origins = ["*"]
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 DATABASE_FILE = 'data.json'
 
