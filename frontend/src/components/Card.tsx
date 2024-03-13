@@ -1,4 +1,4 @@
-import { BookmarkAdd, Favorite, FavoriteOutlined, ReplyOutlined } from '@mui/icons-material';
+import { BookmarkAdd, Favorite, ReplyOutlined } from '@mui/icons-material';
 import { Box, Card, CardContent, Collapse, IconButton, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Post } from '../utils/type';
@@ -15,7 +15,7 @@ const PostCard: React.FC<Post> = React.forwardRef(
 			setExpanded(!expanded);
 		};
 		const handleHugUpdate = () => {
-			if (!selected) onUpdateHug();
+			onUpdateHug();
 		};
 
 		const cardContent = (
