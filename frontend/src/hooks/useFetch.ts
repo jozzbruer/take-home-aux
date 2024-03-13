@@ -21,7 +21,14 @@ const useFetchPosts = (pageParam = 1) => {
 
 		try {
 			const data = await fetchPosts(page);
-			setResults((prev) => [...prev, ...data.data]);
+			const updatedResults = data.data.map((post: Post) => {
+				// If "selected" field doesn't exist, create it and set it to false
+				if (!('selected' in post)) {
+					post.selected = false;
+				}
+				return post;
+			});
+			setResults((prev) => [...prev, ...updatedResults]);
 			setHasNextPage(data.page < data.total_pages);
 		} catch (error) {
 			setIsError(true);
@@ -35,11 +42,39 @@ const useFetchPosts = (pageParam = 1) => {
 		fetchData(pageParam);
 	}, [fetchData, pageParam]);
 
-	const refetchPosts = useCallback(() => {
-		// Clear existing results and refetch from page 1
-		setResults([]);
-		fetchData(1);
-	}, [fetchData]);
+	const handleHugUpdate = useCallback(async (post_url: string) => {
+		try {
+			const response = await fetch(`http://localhost:8000/posts/${post_url}/update_hugs`, {
+				method: 'PUT',
+			});
+			if (!response.ok) {
+				throw new Error('Failed to update hug');
+			}
+			// Update the "selected" field in the local state
+			setResults((prevResults) => {
+				return prevResults.map((post) => {
+					if (post.post_url === post_url) {
+						if (post.selected) {
+							return {
+								...post,
+								num_hugs: post.num_hugs - 1,
+								selected: false,
+							};
+						} else {
+							return {
+								...post,
+								num_hugs: post.num_hugs + 1,
+								selected: true,
+							};
+						}
+					}
+					return post;
+				});
+			});
+		} catch (error) {
+			console.error('Error updating hug:', error);
+		}
+	}, []);
 
 	return useMemo(
 		() => ({
@@ -48,9 +83,9 @@ const useFetchPosts = (pageParam = 1) => {
 			isError,
 			error,
 			hasNextPage,
-			refetchPosts,
+			handleHugUpdate,
 		}),
-		[results, isLoading, isError, error, hasNextPage, refetchPosts]
+		[results, isLoading, isError, error, hasNextPage, handleHugUpdate]
 	);
 };
 

@@ -23,7 +23,7 @@ export type Post = {
 	assessment?: string;
 	question?: string;
 	comments: Record<string, Comment>;
-	selected: true | false | null;
+	selected?: true | false;
 	ref?: any;
 	onUpdateHug: any;
 };
