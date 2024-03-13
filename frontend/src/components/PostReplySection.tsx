@@ -26,6 +26,7 @@ const PostReplySection = ({ expanded, comments }: any) => {
 						key={comment.id}
 						name={comment.display_name}
 						text={comment.text}
+						date={comment.created_at}
 					/>
 				))}
 			</Box>
