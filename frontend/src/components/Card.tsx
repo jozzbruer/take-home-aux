@@ -31,7 +31,10 @@ const PostCard: React.FC<Post> = React.forwardRef(
 					handleReplyClick={handleReplyClick}
 					selected={selected}
 				/>
-				<PostReplySection expanded={expanded} />
+				<PostReplySection
+					expanded={expanded}
+					comments={comments}
+				/>
 			</Card>
 		);
 		const card = ref ? <Box ref={ref}>{cardContent}</Box> : <Box>{cardContent}</Box>;

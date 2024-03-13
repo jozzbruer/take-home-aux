@@ -25,7 +25,7 @@ const PostActions = ({
 				aria-label='reply'
 				style={{ fontSize: '15px' }}
 				onClick={handleReplyClick}>
-				<ReplyOutlined /> {Object.keys(comments).length} comments
+				<ReplyOutlined /> {Object.keys(comments!).length} comments
 			</IconButton>
 			<IconButton
 				aria-label='save'
