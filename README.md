@@ -8,7 +8,7 @@ Welcome to the challenge! This project consists of a React Vite application for 
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:jozzbruer/take-home-aux.git
    ```
 2. Navigate to the `frontend` directory:
    ```bash
