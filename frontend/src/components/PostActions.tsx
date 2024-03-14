@@ -1,5 +1,5 @@
 import { BookmarkAdd, Favorite, ReplyOutlined } from '@mui/icons-material';
-import { Box, CardContent, IconButton } from '@mui/material';
+import { Box, CardContent, IconButton, Typography } from '@mui/material';
 import useDaysAgo from '../hooks/useDaysAgo';
 
 const PostActions = ({
@@ -33,7 +33,11 @@ const PostActions = ({
 				<BookmarkAdd />
 			</IconButton>
 		</CardContent>
-		<p>{useDaysAgo(created_at)} days ago</p>
+		<Typography
+			fontSize={12}
+			mr={2}>
+			{useDaysAgo(created_at)} days ago
+		</Typography>
 	</Box>
 );
 
