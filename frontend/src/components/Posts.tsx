@@ -33,6 +33,7 @@ const PostsList: React.FC = () => {
 				<PostCard
 					ref={lastElementRef}
 					key={post.post_url}
+					url={post.post_url}
 					title={post.title}
 					patient_description={post.patient_description}
 					created_at={post.created_at}
@@ -46,6 +47,7 @@ const PostsList: React.FC = () => {
 		return (
 			<PostCard
 				key={post.post_url}
+				url={post.post_url}
 				title={post.title}
 				patient_description={post.patient_description}
 				created_at={post.created_at}

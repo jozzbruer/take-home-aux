@@ -26,6 +26,7 @@ export type Post = {
 	selected?: true | false;
 	ref?: any;
 	onUpdateHug: any;
+	url?: string;
 };
 
 export interface CardProps {

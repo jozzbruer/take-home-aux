@@ -7,7 +7,7 @@ import PostReplySection from './PostReplySection';
 
 const PostCard: React.FC<Post> = React.forwardRef(
 	(
-		{ title, patient_description, created_at, num_hugs, comments, onUpdateHug, selected },
+		{ title, patient_description, created_at, num_hugs, comments, onUpdateHug, selected, url },
 		ref: any
 	) => {
 		const [expanded, setExpanded] = useState(false);
@@ -32,6 +32,7 @@ const PostCard: React.FC<Post> = React.forwardRef(
 					selected={selected}
 				/>
 				<PostReplySection
+					url={url}
 					expanded={expanded}
 					comments={comments}
 				/>

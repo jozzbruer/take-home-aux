@@ -1,4 +1,4 @@
-import { Post, PostData } from '../utils/type';
+import { Comment, Post, PostData } from '../utils/type';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const fetchPosts = async (pageParam = 1, option = {}): Promise<PostData> => {
@@ -76,6 +76,34 @@ const useFetchPosts = (pageParam = 1) => {
 		}
 	}, []);
 
+	const handleAddComment = useCallback(async (post_url: string, comment: Comment) => {
+		try {
+			const response = await fetch(`http://localhost:8000/posts/${post_url}/add_comment`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(comment),
+			});
+			if (!response.ok) {
+				throw new Error('Failed to add comment');
+			}
+			setResults((prevResults: any) => {
+				return prevResults.map((post: any) => {
+					if (post.post_url === post_url) {
+						return {
+							...post,
+							comments: { ...post.comments, comment },
+						};
+					}
+					return post;
+				});
+			});
+		} catch (error) {
+			console.error('Error adding comment:', error);
+		}
+	}, []);
+
 	return useMemo(
 		() => ({
 			results,
@@ -84,8 +112,9 @@ const useFetchPosts = (pageParam = 1) => {
 			error,
 			hasNextPage,
 			handleHugUpdate,
+			handleAddComment,
 		}),
-		[results, isLoading, isError, error, hasNextPage, handleHugUpdate]
+		[results, isLoading, isError, error, hasNextPage, handleHugUpdate, handleAddComment]
 	);
 };
 

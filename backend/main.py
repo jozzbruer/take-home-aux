@@ -73,6 +73,27 @@ async def update_hugs(post_url: str):
 
      return {"message": f"Post with URL '{post_url}' updated successfully."}
 
+@app.post('posts/{post_url}/add_comment') 
+# async def add_comment(post_url: str, comment: dict):
+#     data = read_file(DATABASE_FILE)
+
+#     post = next((p for p in data if p['post_url'] == post_url), None)
+#     if not post:
+#         raise HTTPException(status_code=404, detail='Post not found')
+
+#     # Check if the comment key exists, if not, create it as an empty dictionary
+#     if 'comments' not in post:
+#         post['comments'] = {}
+
+#     # Add the comment to the comments dictionary
+#     post['comments'].update(comment)
+
+#     # Write updated data back to file
+#     write_to_file(DATABASE_FILE, data)
+
+#     return {"message": f"Comment added to post with URL '{post_url}' successfully."}
+
+
      
 def read_file (file_path):
     with open(file_path,'r') as file:
